@@ -1,0 +1,18 @@
+version: "3.8"
+# TODO: 3 tinykv nodes, peer discovery via env, shared docker network.
+services:
+  node1:
+    image: tinykv:latest
+    environment:
+      - NODE_ID=1
+      - PEERS=node1:7000,node2:7000,node3:7000
+  node2:
+    image: tinykv:latest
+    environment:
+      - NODE_ID=2
+      - PEERS=node1:7000,node2:7000,node3:7000
+  node3:
+    image: tinykv:latest
+    environment:
+      - NODE_ID=3
+      - PEERS=node1:7000,node2:7000,node3:7000

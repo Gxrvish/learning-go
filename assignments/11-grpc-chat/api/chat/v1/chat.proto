@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package chat.v1;
+
+option go_package = "github.com/garvish/learning-go/chat/api/chat/v1;chatv1";
+
+import "google/protobuf/timestamp.proto";
+
+service Chat {
+  rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse);
+  rpc JoinRoom(JoinRoomRequest) returns (JoinRoomResponse);
+  rpc LeaveRoom(LeaveRoomRequest) returns (LeaveRoomResponse);
+  rpc Send(stream Message) returns (stream Message);
+  rpc WatchPresence(WatchPresenceRequest) returns (stream PresenceEvent);
+}
+
+message CreateRoomRequest { string name = 1; }
+message CreateRoomResponse { string room_id = 1; }
+
+message JoinRoomRequest { string room_id = 1; }
+message JoinRoomResponse {}
+
+message LeaveRoomRequest { string room_id = 1; }
+message LeaveRoomResponse {}
+
+message Message {
+  string room_id = 1;
+  string sender = 2;
+  string body = 3;
+  google.protobuf.Timestamp sent_at = 4;
+}
+
+message WatchPresenceRequest { string room_id = 1; }
+
+message PresenceEvent {
+  enum Kind {
+    KIND_UNSPECIFIED = 0;
+    KIND_JOINED = 1;
+    KIND_LEFT = 2;
+  }
+  Kind kind = 1;
+  string user = 2;
+  google.protobuf.Timestamp at = 3;
+}
